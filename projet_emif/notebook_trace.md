@@ -90,7 +90,8 @@ returns = pd.DataFrame(index=raw.index)
 returns['SP500']       = np.log(raw['SP500']       / raw['SP500'].shift(1))
 returns['Eurostoxx50'] = np.log(raw['Eurostoxx50'] / raw['Eurostoxx50'].shift(1))
 returns['Gold']        = np.log(raw['Gold']         / raw['Gold'].shift(1))
-returns['US10Y']       = -raw['US10Y'].diff() / 100   # yield → bond return
+DURATION_10Y = 8.5
+returns['US10Y']       = -raw['US10Y'].diff() * DURATION_10Y / 100
 returns['USDCHF']      = -np.log(raw['USDCHF'] / raw['USDCHF'].shift(1))
 returns['USDJPY']      = -np.log(raw['USDJPY'] / raw['USDJPY'].shift(1))
 
@@ -317,6 +318,7 @@ $$L^{MSE}_t = (r_t^2 - \hat\sigma_t^2)^2, \qquad L^{QLIKE}_t = \frac{r_t^2}{\hat
 
 ```python
 def qlike(actual, forecast):
+    actual = np.maximum(actual, 1e-8)
     return actual / forecast - np.log(actual / forecast) - 1
 
 def mse(actual, forecast):
