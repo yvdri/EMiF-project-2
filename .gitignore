@@ -1,5 +1,5 @@
 # Data
-projet_emif/data/
+project_emif/data/
 *.xlsx
 *.xls
 *.csv
@@ -10,4 +10,4 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Outputs (figures/tables générés à l'exécution)
-projet_emif/outputs/
+project_emif/outputs/
