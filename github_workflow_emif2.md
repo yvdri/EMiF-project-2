@@ -1,370 +1,322 @@
-# Guide de Travail Collaboratif GitHub — EMiF Project 2
+# 📊 emf-project-2026
+**Empirical Methods in Finance — Group Project 2026**
 
-> Ce guide explique **toutes les commandes et actions GitHub** nécessaires pour travailler efficacement en groupe sur ce projet.
-
----
-
-## Table des matières
-
-1. [Installation et configuration initiale](#1-installation-et-configuration-initiale)
-2. [Cloner le repository](#2-cloner-le-repository)
-3. [Comprendre les branches](#3-comprendre-les-branches)
-4. [Workflow quotidien](#4-workflow-quotidien)
-5. [Les commandes Git essentielles](#5-les-commandes-git-essentielles)
-6. [Pull Requests — comment soumettre son travail](#6-pull-requests--comment-soumettre-son-travail)
-7. [Résoudre les conflits](#7-résoudre-les-conflits)
-8. [Bonnes pratiques](#8-bonnes-pratiques)
-9. [Glossaire](#9-glossaire)
+Bienvenue dans ce repository ! Ce guide est fait pour vous si c'est votre **premier projet collaboratif sur GitHub**. Lisez-le attentivement avant de commencer à travailler.
 
 ---
 
-## 1. Installation et configuration initiale
+## 🧠 C'est quoi GitHub, en deux mots ?
 
-### Installer Git
+GitHub est un endroit où on stocke le code **en ligne** et qui garde une **trace de toutes les modifications** faites par chaque membre du groupe. C'est comme Google Docs, mais pour du code — sauf qu'au lieu de modifier en temps réel, chaque personne travaille sur sa propre version locale, puis envoie ses changements.
 
-- **Windows** : Télécharger sur https://git-scm.com/download/win
-- **Mac** : Déjà installé, ou via `brew install git`
-- **Linux** : `sudo apt install git`
+Les concepts clés :
+- **Repository (repo)** : le dossier du projet, hébergé sur GitHub
+- **Clone** : copier le repo sur votre ordinateur
+- **Commit** : enregistrer une modification avec un message
+- **Push** : envoyer vos commits vers GitHub
+- **Pull** : récupérer les dernières modifications de vos coéquipiers
+- **Branch (branche)** : votre espace de travail personnel — expliqué en détail plus bas
 
-### Configurer ton identité Git (à faire une seule fois)
+---
+
+## 🚀 Mise en place (à faire une seule fois)
+
+### 1. Installer Git
+Téléchargez Git sur https://git-scm.com/downloads et installez-le.
+
+### 2. Configurer Git avec votre identité
+```bash
+git config --global user.name "Votre Prénom Nom"
+git config --global user.email "votre@email.com"
+```
+
+### 3. Cloner le repository (télécharger le projet sur votre ordi)
+```bash
+git clone https://github.com/yvdri/emf-project-2026.git
+cd emf-project-2026
+```
+
+---
+
+## 🌿 Les branches — c'est quoi et pourquoi c'est indispensable ?
+
+### Le problème sans branches
+
+Imaginez que vous êtes 4 sur le projet. Alice travaille sur `analyse.py`, Bob aussi. Alice finit et envoie ses modifications. Bob envoie les siennes juste après — et **écrase le travail d'Alice** sans le vouloir. Tout son travail est perdu.
+
+C'est exactement ce qui arrive quand tout le monde travaille sur la même branche `main`.
+
+### La solution : chacun sa branche
+
+Une branche, c'est **votre espace de travail personnel**. Ce n'est pas un fichier, ce n'est pas un dossier — c'est une copie isolée de tout le projet dans laquelle vous travaillez seul. Les autres ne voient pas vos modifications tant que vous ne les avez pas soumises. Et vous, vous ne risquez pas d'écraser leur travail.
+
+La branche `main` = la version officielle et validée du projet. **On n'y touche jamais directement.**
+
+---
+
+## ✅ Le principe fondamental — à lire avant tout le reste
+
+> **Chacun bosse sur sa propre branche → chacun push sur sa propre branche → on merge dans main → Git combine tout sans rien perdre.**
+
+C'est vraiment aussi simple que ça. Voici ce que ça veut dire concrètement :
+
+1. **Vous créez votre branche** : votre espace de travail isolé, personne d'autre ne le touche
+2. **Vous travaillez et vous push** : vos modifications vont sur *votre branche* sur GitHub — `main` n'est pas touché du tout
+3. **Vous créez une Pull Request** : vous proposez d'intégrer votre travail dans `main`
+4. **On merge** : Git prend les modifications de votre branche et les **combine** dans `main` — il ne remplace pas, il ajoute
+
+**Ce que Git fait lors du merge :** il compare fichier par fichier, ligne par ligne. Si Rijad a modifié `data_cleaning.py` et Alice a modifié `regression.py`, les deux fichiers sont intégrés sans problème. Si par hasard deux personnes ont modifié **exactement la même ligne du même fichier**, Git signale un conflit et demande à un humain de choisir — mais même là, rien n'est perdu.
+
+**La seule règle** pour éviter les conflits : communiquez sur qui travaille sur quel fichier.
+
+---
+
+## 📖 Scénario complet — une session de travail réelle
+
+> Voici exactement ce que fait **Rijad** un lundi matin pour travailler sur le nettoyage des données, sans gêner ses coéquipiers Alice, Bob et Charlie qui travaillent en parallèle.
+
+---
+
+### 🔵 Étape 1 — Ouvrir le terminal et aller dans le dossier du projet
 
 ```bash
-git config --global user.name "Ton Prénom Nom"
-git config --global user.email "ton.email@example.com"
+cd emf-project-2026
 ```
 
-> ⚠️ Utilise le même email que ton compte GitHub.
+> Si c'est la première fois, vous avez d'abord cloné le repo (voir section "Mise en place").
 
 ---
 
-## 2. Cloner le repository
+### 🔵 Étape 2 — Récupérer les dernières modifications de l'équipe
 
-La commande `git clone` télécharge le repository sur ton ordinateur.
-
-```bash
-git clone https://github.com/yvdri/EMiF-project-2.git
-cd EMiF-project-2
-```
-
-**Ce que fait cette commande :**
-- `git clone [URL]` — télécharge tout le projet (historique inclus)
-- `cd EMiF-project-2` — se déplace dans le dossier créé
-
-> Tu n'effectues cette étape qu'**une seule fois** au début.
-
----
-
-## 3. Comprendre les branches
-
-Une **branche** est une copie isolée du projet où tu peux travailler sans affecter le reste de l'équipe.
-
-```
-main (branche principale — toujours stable)
-  ├── feature/analyse-donnees     ← ta branche de travail
-  ├── feature/modele-regression   ← branche d'un camarade
-  └── fix/correction-bug          ← correction d'un bug
-```
-
-**Règle d'or :** On ne travaille **jamais directement sur `main`**. On crée toujours une branche.
-
----
-
-## 4. Workflow quotidien
-
-Voici les étapes à suivre à chaque session de travail :
-
-### Étape 1 — Mettre à jour sa copie locale
-
-Avant de commencer à travailler, récupère les dernières modifications de l'équipe :
+Avant de commencer à travailler, on s'assure d'avoir la version la plus récente du projet :
 
 ```bash
 git checkout main
 git pull origin main
 ```
 
-**Ce que font ces commandes :**
-- `git checkout main` — bascule sur la branche principale
-- `git pull origin main` — télécharge les dernières modifications depuis GitHub
+> `git checkout main` : on s'assure d'être sur la branche principale.
+> `git pull origin main` : on télécharge ce que les autres ont envoyé depuis la dernière fois.
+
+**Pourquoi c'est important ?** Si Alice a ajouté un fichier hier soir et que vous ne faites pas `git pull`, vous travaillez sur une version ancienne du projet. Ça crée des conflits plus tard.
 
 ---
 
-### Étape 2 — Créer ou basculer sur ta branche
+### 🔵 Étape 3 — Créer votre propre branche de travail
 
-**Créer une nouvelle branche :**
-```bash
-git checkout -b feature/nom-de-ta-feature
-```
-
-Exemples de noms de branches :
-```bash
-git checkout -b feature/analyse-portefeuille
-git checkout -b feature/visualisation-graphiques
-git checkout -b fix/correction-calcul-rendement
-```
-
-**Basculer sur une branche existante :**
-```bash
-git checkout feature/nom-de-ta-feature
-```
-
----
-
-### Étape 3 — Travailler et sauvegarder tes modifications
-
-Après avoir modifié ou créé des fichiers :
+Maintenant on crée notre espace de travail personnel :
 
 ```bash
-# Voir quels fichiers ont changé
-git status
-
-# Ajouter les fichiers à sauvegarder
-git add nom_du_fichier.py
-# OU ajouter tous les fichiers modifiés
-git add .
-
-# Créer un commit (sauvegarde avec message)
-git commit -m "feat: description courte de ce que tu as fait"
+git checkout -b rijad/nettoyage-donnees
 ```
 
-**Ce que font ces commandes :**
-- `git status` — montre les fichiers modifiés (rouge = non sauvegardé, vert = prêt à commit)
-- `git add` — sélectionne les fichiers à inclure dans la sauvegarde
-- `git commit -m "..."` — crée une sauvegarde avec un message explicatif
+> Cette commande fait **deux choses en même temps** : elle crée la branche ET vous place dessus.
+> Le nom `rijad/nettoyage-donnees` est juste une convention. Choisissez `prenom/ce-que-vous-faites`.
 
-**Convention pour les messages de commit :**
-
-| Préfixe | Quand l'utiliser |
-|---------|-----------------|
-| `feat:` | Nouvelle fonctionnalité |
-| `fix:` | Correction d'un bug |
-| `docs:` | Modification de documentation |
-| `data:` | Ajout ou modification de données |
-| `refactor:` | Réorganisation du code sans changer la logique |
-
-Exemples :
-```
-feat: ajout du modèle de régression linéaire
-fix: correction du calcul de la variance
-docs: mise à jour du README avec les instructions
-data: ajout des données de marché Q1 2024
-```
-
----
-
-### Étape 4 — Envoyer ta branche sur GitHub
+Pour vérifier que vous êtes bien sur votre branche :
 
 ```bash
-git push origin feature/nom-de-ta-feature
-```
-
-**Ce que fait cette commande :**
-- `git push` — envoie tes commits locaux vers GitHub
-- `origin` — désigne le repository GitHub distant
-- `feature/nom-de-ta-feature` — la branche que tu envoies
-
----
-
-## 5. Les commandes Git essentielles
-
-### Voir l'état du projet
-
-```bash
-# Voir les fichiers modifiés
-git status
-
-# Voir l'historique des commits
-git log --oneline
-
-# Voir les différences non sauvegardées
-git diff
-```
-
-### Gérer les branches
-
-```bash
-# Lister toutes les branches locales
 git branch
-
-# Lister les branches distantes (GitHub)
-git branch -r
-
-# Supprimer une branche locale (après merge)
-git branch -d feature/nom-de-ta-feature
 ```
 
-### Récupérer les modifications
+Vous verrez quelque chose comme :
 
-```bash
-# Récupérer et fusionner les dernières modifications
-git pull origin main
-
-# Récupérer sans fusionner (pour voir ce qui arrive)
-git fetch origin
+```
+  main
+* rijad/nettoyage-donnees
 ```
 
-### Annuler des modifications
-
-```bash
-# Annuler les modifications d'un fichier non encore committé
-git checkout -- nom_du_fichier.py
-
-# Défaire le dernier commit (en gardant les modifications)
-git reset HEAD~1
-
-# Voir un commit spécifique
-git show abc1234
-```
+Le `*` indique la branche sur laquelle vous êtes. Si vous voyez `* rijad/nettoyage-donnees`, vous êtes au bon endroit. Vous pouvez travailler.
 
 ---
 
-## 6. Pull Requests — comment soumettre son travail
+### 🔵 Étape 4 — Travailler normalement
 
-Une **Pull Request (PR)** est une demande de fusionner ta branche dans `main`. C'est le moyen de faire relire son travail par l'équipe.
+Ouvrez VS Code, modifiez vos fichiers Python, vos notebooks Jupyter, etc. Tout ce que vous faites ici est **isolé dans votre branche**. Vous ne pouvez pas écraser le travail des autres, et les autres ne peuvent pas écraser le vôtre.
 
-### Comment créer une Pull Request
+Par exemple, Rijad modifie `data_cleaning.py` et ajoute une fonction pour supprimer les valeurs manquantes.
 
-1. Va sur **https://github.com/yvdri/EMiF-project-2**
-2. Tu verras une bannière jaune "Compare & pull request" — clique dessus
-3. Remplis le formulaire :
-   - **Titre** : ce que tu as fait (ex: `feat: ajout modèle de régression`)
-   - **Description** : explique les changements, ce qui a été testé
-4. Clique **Create pull request**
-5. Un camarade relit et approuve (ou demande des modifications)
-6. Une fois approuvé → **Merge pull request**
+Pendant ce temps, Alice travaille sur `regression.py` dans sa propre branche `alice/regression-ols`. Les deux peuvent travailler en parallèle sans se gêner.
 
-### Après le merge
+---
+
+### 🔵 Étape 5 — Sauvegarder son travail (commit)
+
+Une fois que vous avez fait des modifications que vous voulez garder :
 
 ```bash
-# Revenir sur main et récupérer les nouvelles modifications
+git status
+```
+
+Cette commande affiche les fichiers que vous avez modifiés. Vérifiez que c'est bien ce à quoi vous vous attendez.
+
+Ensuite, on ajoute les fichiers et on fait un commit :
+
+```bash
+git add .
+git commit -m "Ajout fonction suppression valeurs manquantes"
+```
+
+> Le message après `-m` doit décrire ce que vous avez fait, en une phrase courte. Vos coéquipiers liront ces messages pour comprendre ce qui a changé.
+
+Vous pouvez faire autant de commits que vous voulez dans une même session. C'est même recommandé — sauvegardez souvent.
+
+---
+
+### 🔵 Étape 6 — Envoyer votre branche sur GitHub
+
+Quand votre travail est prêt, envoyez-le :
+
+```bash
+git push origin rijad/nettoyage-donnees
+```
+
+Votre branche est maintenant visible sur GitHub, mais elle n'est **pas encore dans `main`**. Le projet officiel n'a pas été modifié. Vous devez d'abord passer par une Pull Request.
+
+---
+
+### 🔵 Étape 7 — Créer une Pull Request pour intégrer votre travail dans main
+
+C'est l'étape où vous soumettez votre travail à l'équipe pour validation.
+
+1. Allez sur https://github.com/yvdri/emf-project-2026
+2. GitHub affiche une bannière en haut : **"rijad/nettoyage-donnees had recent pushes — Compare & pull request"**. Cliquez dessus.
+3. Vous voyez un formulaire. Remplissez :
+   - **Titre** : ce que vous avez fait (ex: "Nettoyage des valeurs manquantes")
+   - **Description** : détails si nécessaire
+4. Cliquez sur **"Create pull request"**
+
+Un coéquipier peut maintenant relire votre code, laisser des commentaires, et quand tout le monde est d'accord :
+
+5. Cliquez sur **"Merge pull request"** puis **"Confirm merge"**
+
+✅ Votre travail est maintenant intégré dans `main`. Tout le monde peut le récupérer avec `git pull`.
+
+---
+
+### 🔵 Étape 8 — Nettoyer et revenir sur main pour la prochaine session
+
+```bash
 git checkout main
 git pull origin main
+```
 
-# Supprimer ta branche locale (elle est fusionnée, plus besoin)
-git branch -d feature/nom-de-ta-feature
+Vous êtes de retour sur la version officielle, avec votre travail intégré. Prêt pour la prochaine tâche.
+
+---
+
+## 🗺️ Vue d'ensemble du flux de travail
+
+```
+                     ┌─────────────────────────────────────────┐
+                     │              BRANCHE main               │
+                     │    (version officielle du projet)        │
+                     └────────────────┬────────────────────────┘
+                                      │
+              ┌───────────────────────┼───────────────────────┐
+              │                       │                       │
+              ▼                       ▼                       ▼
+  rijad/nettoyage-donnees   alice/regression-ols    bob/visualisation
+    (Rijad travaille)         (Alice travaille)      (Bob travaille)
+    commit → commit           commit → commit        commit → commit
+              │                       │                       │
+              └───────────────────────┼───────────────────────┘
+                                      │
+                              Pull Request + Merge
+                                      │
+                                      ▼
+                     ┌─────────────────────────────────────────┐
+                     │   main mis à jour avec tout le travail  │
+                     └─────────────────────────────────────────┘
 ```
 
 ---
 
-## 7. Résoudre les conflits
+## ❌ Les erreurs classiques et comment les éviter
 
-Un **conflit** survient quand deux personnes ont modifié la même partie d'un fichier. Git ne sait pas quelle version choisir.
+**"J'ai oublié de créer une branche et j'ai travaillé directement sur main"**
+> Avant de commencer, tapez toujours `git branch` pour vérifier où vous êtes. Si vous voyez `* main`, arrêtez-vous et créez une branche.
 
-### Comment ça se présente dans le fichier
+**"J'ai fait `git push` et ça m'a dit que j'étais en retard"**
+> Quelqu'un a envoyé des modifications pendant que vous travailliez. Faites `git pull origin main` pour vous mettre à jour, puis recommencez votre push.
 
-```python
+**"J'ai un conflit, je ne sais pas quoi faire"**
+> Ne paniquez pas. Ouvrez le fichier en conflit, vous verrez des marqueurs comme :
+```
 <<<<<<< HEAD
-# Ton code (ta version locale)
-rendement = calcul_rendement(prix)
+votre version
 =======
-# Code de ton camarade (version de GitHub)
-rendement = prix.pct_change().mean()
->>>>>>> feature/analyse-donnees
+version du coéquipier
+>>>>>>> main
 ```
+> Gardez la version correcte (ou les deux si applicable), supprimez les marqueurs, puis faites `git add .` et `git commit`.
 
-### Comment résoudre
+**"Je ne sais pas sur quelle branche je suis"**
+> Tapez `git branch`. La ligne avec `*` devant est votre branche actuelle.
 
-1. Ouvre le fichier dans ton éditeur
-2. Choisis quelle version garder (ou combine les deux)
-3. Supprime les marqueurs `<<<<<<<`, `=======`, `>>>>>>>`
-4. Sauvegarde, puis :
+---
+
+## 📋 Commandes de référence rapide
 
 ```bash
-git add nom_du_fichier.py
-git commit -m "fix: résolution du conflit sur calcul_rendement"
-```
+# 1er fois !!!! Début de session (toujours faire ça en premier)
+git checkout main
+git pull origin main
+git checkout -b prenom/ma-tache 
 
----
-
-## 8. Bonnes pratiques
-
-### ✅ À faire
-- **Toujours** faire `git pull origin main` avant de commencer
-- Créer **une branche par fonctionnalité** ou par tâche
-- Faire des commits **petits et fréquents** avec des messages clairs
-- **Relire** les Pull Requests de tes camarades
-- Mettre à jour le README si tu ajoutes quelque chose d'important
-
-### ❌ À éviter
-- Ne **jamais** pusher directement sur `main`
-- Ne pas faire des commits avec des messages vagues comme "modif" ou "truc"
-- Ne pas committer des fichiers inutiles (`.DS_Store`, `__pycache__/`, etc.)
-- Ne pas laisser des branches ouvertes après merge
-
-### .gitignore — fichiers à ne pas versionner
-
-Le fichier `.gitignore` liste les fichiers que Git ignore automatiquement :
-
-```gitignore
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.env
-venv/
-.venv/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Données sensibles
-data/raw/
-*.csv
-*.xlsx
-
-# Système
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-```
-
----
-
-## 9. Glossaire
-
-| Terme | Définition |
-|-------|-----------|
-| **Repository (repo)** | Le projet complet avec tout l'historique des modifications |
-| **Clone** | Télécharger le repo sur son ordinateur |
-| **Branch (branche)** | Copie isolée du projet pour travailler sans affecter les autres |
-| **Commit** | Une sauvegarde des modifications avec un message explicatif |
-| **Push** | Envoyer ses commits locaux vers GitHub |
-| **Pull** | Récupérer les commits de GitHub vers son ordinateur |
-| **Merge** | Fusionner une branche dans une autre |
-| **Pull Request (PR)** | Demande de fusion avec revue de code par l'équipe |
-| **Conflit** | Quand deux personnes ont modifié le même endroit dans un fichier |
-| **Origin** | Nom par défaut du repository distant sur GitHub |
-| **Main** | La branche principale, toujours stable et fonctionnelle |
-| **HEAD** | Le commit actuel sur lequel tu te trouves |
-| **Stage / Index** | Zone de transit avant un commit (`git add` y dépose les fichiers) |
-| **Fetch** | Récupérer les infos de GitHub sans les fusionner |
-
----
-
-## Résumé express — Les 6 commandes du quotidien
-
-```bash
-# 1. Mettre à jour
+# Toutes les fois d'après, debut de session, pour recup le main sur sa branche :
+git checkout main # ICI on verifie si la version,joue et est correcte parce que si elle joue pas et qu'on fait les codes suivants ça ecrase notre branche avec le main (qui joue pas)
+git checkout prenom/ma-tache 
 git pull origin main
 
-# 2. Créer/changer de branche
-git checkout -b feature/ma-feature
 
-# 3. Voir ce qui a changé
-git status
+# Pendant le travail 
+git branch                        # Vérifier sur quelle branche on est
 
-# 4. Préparer les fichiers
-git add .
 
-# 5. Sauvegarder
-git commit -m "feat: description claire"
+# Fin de session (envoyer son travail)
+git status                        # Voir les fichiers modifiés
+git add .                         # Préparer tous les fichiers
+git commit -m "message"           # Sauvegarder avec un message
+git push origin prenom/ma-tache   # Envoyer sa branche sur GitHub
+# Puis créer une Pull Request sur GitHub !!! donc faut faire ça sur Github c'est très important !! et ensuite faire la suite :
 
-# 6. Envoyer sur GitHub
-git push origin feature/ma-feature
+# Après le merge
+git checkout main
+git pull origin main
 ```
 
 ---
 
-*Repo GitHub : https://github.com/yvdri/EMiF-project-2*
+## 🗂️ Structure du projet
+
+```
+emf-project-2026/
+│
+├── data/               <- Données brutes (ne jamais modifier ces fichiers !)
+├── notebooks/          <- Jupyter notebooks d'exploration
+├── src/                <- Scripts Python propres et réutilisables
+├── results/            <- Graphiques, tableaux de résultats
+├── README.md           <- Ce fichier
+└── .gitignore          <- Fichiers à ignorer (automatique)
+```
+
+---
+
+## 👥 Inviter les membres du groupe
+
+Settings → Collaborators → Add people → entrez leur email ou username GitHub.
+
+---
+
+## 🆘 En cas de problème
+
+1. **Ne paniquez pas et ne forcez rien** — une mauvaise commande peut aggraver les choses
+2. Tapez `git status` et `git branch` pour comprendre où vous en êtes
+3. Cherchez le message d'erreur sur Google — les réponses existent toujours sur Stack Overflow
+4. **Demandez à un coéquipier avant toute action irréversible** (avant tout `reset`, `force`, ou `rm`)
+
+---
+
+*README rédigé pour les membres du projet EMF 2026 — première utilisation de GitHub en groupe.*
