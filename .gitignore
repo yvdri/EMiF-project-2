@@ -11,3 +11,7 @@ __pycache__/
 
 # Outputs (figures/tables générés à l'exécution)
 project_emif/outputs/
+
+# Guidelines and plan docs
+EMIF Proj Plan Clem.docx
+EMIF_Project_2_Instructions.pdf
